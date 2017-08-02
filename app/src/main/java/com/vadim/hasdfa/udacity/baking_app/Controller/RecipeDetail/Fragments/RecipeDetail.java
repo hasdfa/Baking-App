@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +24,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.SavedFragment;
 import com.vadim.hasdfa.udacity.baking_app.Model.RecipesHelper;
 import com.vadim.hasdfa.udacity.baking_app.Model.Step;
 import com.vadim.hasdfa.udacity.baking_app.R;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * Created by Raksha Vadim on 01.08.17, 20:03.
  */
 
-public class RecipeDetail extends Fragment {
+public class RecipeDetail extends SavedFragment {
     private OnButtonPressed mCallback;
     public interface OnButtonPressed {
         void onPrevious(Button button);
@@ -100,7 +100,7 @@ public class RecipeDetail extends Fragment {
         Button previousButton = view.findViewById(R.id.previous_button);
         if (nextButton != null
                 && previousButton != null) {
-            if (stepNum == 0) {
+            if (stepNum == -1) {
                 previousButton.setEnabled(false);
             }
             if (stepNum == steps.size()-1) {

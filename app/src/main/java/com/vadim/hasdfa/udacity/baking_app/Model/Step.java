@@ -1,10 +1,13 @@
 package com.vadim.hasdfa.udacity.baking_app.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Raksha Vadim on 01.08.17, 20:47.
  */
 
-public class Step {
+public class Step implements Parcelable {
     private int id;
     private String shortDescription;
     private String description;
@@ -21,6 +24,30 @@ public class Step {
       }
     ],
      */
+
+    public Step(){
+
+    }
+
+    protected Step(Parcel in) {
+        id = in.readInt();
+        shortDescription = in.readString();
+        description = in.readString();
+        videoUrl = in.readString();
+        thumbnailUrl = in.readString();
+    }
+
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -65,5 +92,19 @@ public class Step {
     @Override
     public String toString() {
         return shortDescription;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(shortDescription);
+        parcel.writeString(description);
+        parcel.writeString(videoUrl);
+        parcel.writeString(thumbnailUrl);
     }
 }

@@ -1,5 +1,7 @@
 package com.vadim.hasdfa.udacity.baking_app.Model;
 
+import android.os.Bundle;
+
 import java.util.ArrayList;
 
 /**
@@ -25,5 +27,20 @@ public class RecipesHelper {
 
     public void setRecipes(ArrayList<Recipe> recipes) {
         this.recipes = recipes;
+    }
+
+
+
+    private static final String key = "RecipesHelperSavedArray";
+    public static void onSavedInstance(Bundle outSate) {
+        if (outSate != null)
+            outSate.putParcelableArrayList(key, shared().recipes);
+    }
+    public static void onRestoreInstance(Bundle savedInstance) {
+        if (savedInstance != null) {
+            ArrayList<Recipe> restoreRecipes = savedInstance.getParcelableArrayList(key);
+            if (restoreRecipes != null)
+                shared().recipes = restoreRecipes;
+        }
     }
 }

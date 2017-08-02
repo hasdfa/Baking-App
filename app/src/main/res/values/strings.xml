@@ -3,4 +3,5 @@
     <string name="servings">servings</string>
     <string name="next"><![CDATA[Next ->]]></string>
     <string name="previous"><![CDATA[<- Previous]]></string>
+    <string name="shopping_list_label">Shopping list</string>
 </resources>

@@ -1,11 +1,11 @@
 package com.vadim.hasdfa.udacity.baking_app.Controller.SelectRecipe;
 
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.AppCompatSavedActivity;
 import com.vadim.hasdfa.udacity.baking_app.Model.NetworkUtils.NetworkController;
 import com.vadim.hasdfa.udacity.baking_app.Model.NetworkUtils.OnLoadListener;
 import com.vadim.hasdfa.udacity.baking_app.Model.Recipe;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatSavedActivity {
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;

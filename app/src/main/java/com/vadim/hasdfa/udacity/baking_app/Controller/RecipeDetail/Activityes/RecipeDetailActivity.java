@@ -3,9 +3,11 @@ package com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Activityes;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.widget.Button;
 
+import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.AppCompatSavedActivity;
+import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments.IngridientsFragment;
 import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments.RecipeDetail;
 import com.vadim.hasdfa.udacity.baking_app.Model.RecipesHelper;
 import com.vadim.hasdfa.udacity.baking_app.R;
@@ -14,7 +16,7 @@ import com.vadim.hasdfa.udacity.baking_app.R;
  * Created by Raksha Vadim on 02.08.17, 00:00.
  */
 
-public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetail.OnButtonPressed {
+public class RecipeDetailActivity extends AppCompatSavedActivity implements RecipeDetail.OnButtonPressed {
     int selectedR;
     int selectedS;
     boolean isToolbarHidden = false;
@@ -44,13 +46,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            String title;
+            if (selectedS == -1) {
+                title = "Ingredients";
+            } else {
+                title = RecipesHelper.shared()
+                        .getRecipes()
+                        .get(selectedR)
+                        .getSteps()
+                        .get(selectedS)
+                        .getShortDescription();
+            }
             getSupportActionBar()
-                    .setTitle(RecipesHelper.shared()
-                            .getRecipes()
-                            .get(selectedR)
-                            .getSteps()
-                            .get(selectedS)
-                            .getShortDescription()
+                    .setTitle(
+                            title
                     );
         }
     }
@@ -66,7 +75,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         toFragment.putInt("selectedR", selectedR);
         toFragment.putInt("selectedS", selectedS);
         toFragment.putBoolean("isToolbarHidden", isToolbarHidden);
-        RecipeDetail fragment = new RecipeDetail();
+        Fragment fragment;
+        if (selectedS >= 0){
+            fragment = new RecipeDetail();
+        } else {
+            fragment = new IngridientsFragment();
+        }
 
         fragment.setArguments(toFragment);
 

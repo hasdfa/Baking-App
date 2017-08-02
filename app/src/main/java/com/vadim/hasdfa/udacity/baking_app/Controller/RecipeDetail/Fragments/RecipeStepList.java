@@ -2,7 +2,6 @@ package com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,24 +9,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.SavedFragment;
+import com.vadim.hasdfa.udacity.baking_app.Model.Recipe;
 import com.vadim.hasdfa.udacity.baking_app.Model.RecipesHelper;
 import com.vadim.hasdfa.udacity.baking_app.Model.Step;
 import com.vadim.hasdfa.udacity.baking_app.R;
-
-import java.util.ArrayList;
 
 /**
  * Created by Raksha Vadim on 01.08.17, 19:53.
  */
 
-public class RecipeStepList extends Fragment {
-    private ArrayList<Step> steps;
+public class RecipeStepList extends SavedFragment {
+    private Recipe recipe;
 
     OnSelectRecipe mCallback = null;
 
 
     public interface OnSelectRecipe {
-        void onImageSelected(View view, int position);
+        void onItemSelected(View view, int position);
     }
 
     @Override
@@ -51,7 +50,7 @@ public class RecipeStepList extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         mRecylerView.setLayoutManager(llm);
 
-        steps = RecipesHelper.shared().getRecipes().get(getArguments().getInt("selectedR")).getSteps();
+        recipe = RecipesHelper.shared().getRecipes().get(getArguments().getInt("selectedR"));
         RecipeStepListAdapter mAdapter = new RecipeStepListAdapter();
         mRecylerView.setAdapter(mAdapter);
 
@@ -68,20 +67,25 @@ public class RecipeStepList extends Fragment {
 
         @Override
         public void onBindViewHolder(RecipeStepListAdapter.ViewHolder holder, int position) {
-            final Step step = steps.get(position);
-            holder.title.setText(step.getShortDescription());
+            position -= 1;
+            if (position >= 0) {
+                final Step step = recipe.getSteps().get(position);
+                holder.title.setText(step.getShortDescription());
+            } else {
+                holder.title.setText("Ingredients");
+            }
             final int i = position;
             holder.clickable.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                mCallback.onImageSelected(view, i);
+                    mCallback.onItemSelected(view, i);
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return steps == null ? 0 : steps.size();
+            return recipe.getSteps() == null ? 0 : recipe.getSteps().size() + 1;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

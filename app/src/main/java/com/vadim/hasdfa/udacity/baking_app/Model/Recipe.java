@@ -1,12 +1,16 @@
 package com.vadim.hasdfa.udacity.baking_app.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Raksha Vadim on 01.08.17, 20:38.
  */
 
-public class Recipe {
+public class Recipe implements Parcelable {
     private int id;
     private String name;
     private ArrayList<Ingredient> ingredients = new ArrayList<>();
@@ -37,6 +41,41 @@ public class Recipe {
     "image": ""
   },
      */
+    public Recipe(){
+
+    }
+
+    protected Recipe(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        servings = in.readInt();
+        image = in.readString();
+
+        ingredients = new ArrayList<Ingredient>(
+                Arrays.<Ingredient>asList(
+                        (Ingredient[]) in.readArray(Ingredient.class.getClassLoader()
+                        )
+                )
+        );
+        steps = new ArrayList<Step>(
+                Arrays.<Step>asList(
+                        (Step[]) in.readArray(Ingredient.class.getClassLoader()
+                        )
+                )
+        );
+    }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -89,5 +128,20 @@ public class Recipe {
     @Override
     public String toString() {
         return name + ";Ingridients: " + ingredients.toString() + ";Steps: " + steps.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeInt(servings);
+        parcel.writeString(image);
+        parcel.writeArray(ingredients.toArray());
+        parcel.writeArray(steps.toArray());
     }
 }

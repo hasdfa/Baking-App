@@ -3,10 +3,12 @@ package com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Activityes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 
+import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.AppCompatSavedActivity;
+import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments.IngridientsFragment;
 import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments.RecipeDetail;
 import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments.RecipeStepList;
 import com.vadim.hasdfa.udacity.baking_app.Model.RecipesHelper;
@@ -16,7 +18,7 @@ import com.vadim.hasdfa.udacity.baking_app.R;
  * Created by Raksha Vadim on 01.08.17, 20:00.
  */
 
-public class RecipeViewActivity extends AppCompatActivity implements RecipeStepList.OnSelectRecipe {
+public class RecipeViewActivity extends AppCompatSavedActivity implements RecipeStepList.OnSelectRecipe {
     boolean isTwoPanel = false;
 
     int selectedR;
@@ -41,8 +43,8 @@ public class RecipeViewActivity extends AppCompatActivity implements RecipeStepL
                     .commit();
 
             if (isTwoPanel) {
-                RecipeDetail fragment2 = new RecipeDetail();
-                toFragments.putInt("selectedS", 0);
+                onItemSelected(null, -1);
+                Fragment fragment2 = new IngridientsFragment();
                 fragment2.setArguments(toFragments);
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -73,7 +75,7 @@ public class RecipeViewActivity extends AppCompatActivity implements RecipeStepL
     }
 
     @Override
-    public void onImageSelected(View view, int position) {
+    public void onItemSelected(View view, int position) {
         Bundle toSend = new Bundle();
         int r = getIntent().getExtras().getInt("selectedR");
         Log.d("myLog", "["+r+"]["+position+"]");
@@ -81,7 +83,12 @@ public class RecipeViewActivity extends AppCompatActivity implements RecipeStepL
         toSend.putInt("selectedS", position);
 
         if (isTwoPanel) {
-            RecipeDetail newFragment = new RecipeDetail();
+            Fragment newFragment;
+            if (position == -1) {
+                newFragment = new IngridientsFragment();
+            } else {
+                newFragment = new RecipeDetail();
+            }
 
             newFragment.setArguments(toSend);
             getSupportFragmentManager()
