@@ -1,6 +1,7 @@
 package com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -65,7 +66,7 @@ public class IngridientsFragment extends SavedFragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(llm);
 
-        IngridientsAdapter mAdapter = new IngridientsAdapter();
+        IngredientsAdapter mAdapter = new IngredientsAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         Button nextButton = view.findViewById(R.id.next_button);
@@ -90,21 +91,28 @@ public class IngridientsFragment extends SavedFragment {
 
 
 //    private void addShortcut() {
-//        //where this is a context (e.g. your current activity)
-//        final Intent shortcutIntent = new Intent(getContext(), IngridientsShoppingListActivity.class);
+//        //Adding shortcut for MainActivity
+//        //on Home screen
+//        Intent shortcutIntent = new Intent(
+//                getActivity().getApplicationContext(),
+//                IngridientsShoppingListActivity.class);
 //
-//        final Intent intent = new Intent();
-//        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-//        // Sets the custom shortcut's title
-//        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "TEST");
-//        // Set the custom shortcut icon
-//        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(getContext(), R.drawable.ic_format_list));
-//        // add the shortcut
-//        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-//        getContext().sendBroadcast(intent);
+//        shortcutIntent.setAction(Intent.ACTION_MAIN);
+//        shortcutIntent.setAction(Intent.CATEGORY_LAUNCHER);
+//
+//        Intent addIntent = new Intent();
+//        addIntent
+//                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+//        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Ingredients");
+//        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+//                Intent.ShortcutIconResource.fromContext(getActivity().getApplicationContext(),
+//                        R.mipmap.ic_launcher_round));
+//        addIntent
+//                .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+//        getActivity().getApplicationContext().sendBroadcast(addIntent);
 //    }
 
-    class IngridientsAdapter extends RecyclerView.Adapter<IngridientsAdapter.ViewHolder> {
+    class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == 0 || viewType == getItemCount()-1) {
@@ -125,14 +133,22 @@ public class IngridientsFragment extends SavedFragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             position -= 1;
             Log.d("myLog", "getItemCount(): " + getItemCount());
             if (position == getItemCount()-2) {
                 holder.cardView.setVisibility(View.GONE);
             } else if (position >= 0) {
-                Ingredient i = ingredients.get(position);
+                final Ingredient i = ingredients.get(position);
                 holder.checkbox.setText(i.getIngredientName());
+                holder.checkbox.setChecked(getChecked(i.getIngredientName()));
+                holder.checkbox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        i.setChecked(holder.checkbox.isChecked());
+                        saveChecked(holder.checkbox.isChecked(), i.getIngredientName());
+                    }
+                });
                 int q = i.getQuantity();
                 holder.quntity.setText(""+q);
                 String measure;
@@ -149,13 +165,12 @@ public class IngridientsFragment extends SavedFragment {
                 holder.title.setTextSize(21f);
                 Typeface type = Typeface.createFromAsset(getContext().getAssets(),"fonts/PetitFormalScript-Regular.ttf");
                 holder.title.setTypeface(type);
-                holder.clickable.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // TODO: add shopping list to homescreen
-                        // How can i do that?
-                    }
-                });
+//                holder.clickable.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        addShortcut();
+//                    }
+//                });
             }
         }
 
@@ -168,6 +183,27 @@ public class IngridientsFragment extends SavedFragment {
                 return measure + "s";
             }
             return measure + "es";
+        }
+
+        private static final String sharedKEY = "checked_key";
+        private void saveChecked(boolean isChecked, String title){
+            String key = getKeyByTitle(title);
+            SharedPreferences sp = getContext().getSharedPreferences(sharedKEY, Context.MODE_PRIVATE);
+            sp.edit().putBoolean(key, isChecked).apply();
+        }
+
+        private boolean getChecked(String title) {
+            String key = getKeyByTitle(title);
+            SharedPreferences sp = getContext().getSharedPreferences(sharedKEY, Context.MODE_PRIVATE);
+            return sp.getBoolean(key, false);
+        }
+
+        private String getKeyByTitle(String title){
+            String key = "";
+            for (char i: title.toCharArray()) {
+                key += (int) i;
+            }
+            return key;
         }
 
         @Override

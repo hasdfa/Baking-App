@@ -11,6 +11,7 @@ public class Ingredient implements Parcelable {
     private int quantity;
     private String measure;
     private String ingredientName;
+    private boolean isChecked;
     /*
     "ingredients": [
       {
@@ -65,6 +66,14 @@ public class Ingredient implements Parcelable {
 
     public void setIngredientName(String ingredientName) {
         this.ingredientName = ingredientName;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     @Override

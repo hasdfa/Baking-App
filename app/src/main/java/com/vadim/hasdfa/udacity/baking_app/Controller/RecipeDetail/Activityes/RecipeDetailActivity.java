@@ -6,9 +6,9 @@ import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.widget.Button;
 
-import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.AppCompatSavedActivity;
 import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments.IngridientsFragment;
 import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Fragments.RecipeDetail;
+import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.AppCompatSavedActivity;
 import com.vadim.hasdfa.udacity.baking_app.Model.RecipesHelper;
 import com.vadim.hasdfa.udacity.baking_app.R;
 
@@ -18,7 +18,7 @@ import com.vadim.hasdfa.udacity.baking_app.R;
 
 public class RecipeDetailActivity extends AppCompatSavedActivity implements RecipeDetail.OnButtonPressed {
     int selectedR;
-    int selectedS;
+    int selectedS = -2;
     boolean isToolbarHidden = false;
 
     @Override
@@ -42,12 +42,16 @@ public class RecipeDetailActivity extends AppCompatSavedActivity implements Reci
             selectedR = savedInstanceState.getInt("selectedR");
             selectedS = savedInstanceState.getInt("selectedS");
         }
+        updateBar();
+    }
 
-
+    private void updateBar(){
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             String title;
-            if (selectedS == -1) {
+            if (selectedS == -2) {
+                title = "";
+            } else if (selectedS == -1) {
                 title = "Ingredients";
             } else {
                 title = RecipesHelper.shared()
@@ -71,6 +75,7 @@ public class RecipeDetailActivity extends AppCompatSavedActivity implements Reci
     }
 
     private void setFragment(){
+        updateBar();
         Bundle toFragment = new Bundle();
         toFragment.putInt("selectedR", selectedR);
         toFragment.putInt("selectedS", selectedS);
@@ -115,5 +120,6 @@ public class RecipeDetailActivity extends AppCompatSavedActivity implements Reci
         super.onRestoreInstanceState(savedInstanceState);
         selectedR = savedInstanceState.getInt("selectedR");
         selectedS = savedInstanceState.getInt("selectedS");
+        updateBar();
     }
 }
