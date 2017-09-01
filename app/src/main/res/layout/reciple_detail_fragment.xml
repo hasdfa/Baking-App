@@ -19,8 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintDimensionRatio="H,16:9"/>
 
-
-
     <TextView
         android:id="@+id/step_instruction"
         android:layout_width="0dp"

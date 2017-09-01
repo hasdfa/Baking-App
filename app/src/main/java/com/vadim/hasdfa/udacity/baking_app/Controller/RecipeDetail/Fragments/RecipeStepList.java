@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.SavedFragment;
 import com.vadim.hasdfa.udacity.baking_app.Model.Recipe;
 import com.vadim.hasdfa.udacity.baking_app.Model.RecipesHelper;
@@ -71,6 +73,12 @@ public class RecipeStepList extends SavedFragment {
             if (position >= 0) {
                 final Step step = recipe.getSteps().get(position);
                 holder.title.setText(step.getShortDescription());
+
+                if (!step.getThumbnailUrl().isEmpty()) {
+                    Picasso.with(holder.clickable.getContext())
+                            .load(step.getThumbnailUrl())
+                            .into(holder.thumbnail);
+                }
             } else {
                 holder.title.setText("Ingredients");
             }
@@ -91,10 +99,12 @@ public class RecipeStepList extends SavedFragment {
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
             View clickable;
+            ImageView thumbnail;
             ViewHolder(View itemView) {
                 super(itemView);
                 title = (TextView) itemView.findViewById(R.id.title);
                 clickable = itemView.findViewById(R.id.clickable);
+                thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
             }
         }
     }

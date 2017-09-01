@@ -187,13 +187,13 @@ public class IngridientsFragment extends SavedFragment {
 
         private static final String sharedKEY = "checked_key";
         private void saveChecked(boolean isChecked, String title){
-            String key = getKeyByTitle(title);
+            String key = getKeyByTitle(currentRecipe.getName()+title);
             SharedPreferences sp = getContext().getSharedPreferences(sharedKEY, Context.MODE_PRIVATE);
             sp.edit().putBoolean(key, isChecked).apply();
         }
 
         private boolean getChecked(String title) {
-            String key = getKeyByTitle(title);
+            String key = getKeyByTitle(currentRecipe.getName()+title);
             SharedPreferences sp = getContext().getSharedPreferences(sharedKEY, Context.MODE_PRIVATE);
             return sp.getBoolean(key, false);
         }

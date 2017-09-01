@@ -62,5 +62,14 @@
             app:layout_constraintBottom_toBottomOf="@+id/servings_count"
             app:layout_constraintRight_toLeftOf="@+id/servings_count"
             app:layout_constraintTop_toTopOf="@+id/servings_count" />
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

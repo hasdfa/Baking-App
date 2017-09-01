@@ -120,6 +120,5 @@ public class RecipeDetailActivity extends AppCompatSavedActivity implements Reci
         super.onRestoreInstanceState(savedInstanceState);
         selectedR = savedInstanceState.getInt("selectedR");
         selectedS = savedInstanceState.getInt("selectedS");
-        updateBar();
     }
 }

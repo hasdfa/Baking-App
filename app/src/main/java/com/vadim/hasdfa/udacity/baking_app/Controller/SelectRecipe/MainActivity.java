@@ -1,15 +1,19 @@
 package com.vadim.hasdfa.udacity.baking_app.Controller.SelectRecipe;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.vadim.hasdfa.udacity.baking_app.Controller.SavedHelpers.AppCompatSavedActivity;
 import com.vadim.hasdfa.udacity.baking_app.Model.NetworkUtils.NetworkController;
 import com.vadim.hasdfa.udacity.baking_app.Model.NetworkUtils.OnLoadListener;
 import com.vadim.hasdfa.udacity.baking_app.Model.Recipe;
 import com.vadim.hasdfa.udacity.baking_app.R;
+import com.vadim.hasdfa.udacity.baking_app.Widget.RecipeViewWidget;
 
 import java.util.ArrayList;
 
@@ -48,7 +52,14 @@ public class MainActivity extends AppCompatSavedActivity {
         NetworkController.load(new OnLoadListener() {
             @Override
             public void onLoadFinished(ArrayList<Recipe> recipes) {
-                mAdapter.notifyDataSetChanged(recipes);
+                if (recipes.isEmpty() || recipes.size() == 0) {
+                    Toast.makeText(MainActivity.this, "Load data error!", Toast.LENGTH_LONG).show();
+                } else {
+                    mAdapter.notifyDataSetChanged(recipes);
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(MainActivity.this);
+                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(MainActivity.this, RecipeViewWidget.class));
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_gridview);
+                }
             }
         });
     }

@@ -53,13 +53,13 @@ public class Recipe implements Parcelable {
 
         ingredients = new ArrayList<Ingredient>(
                 Arrays.<Ingredient>asList(
-                        (Ingredient[]) in.readArray(Ingredient.class.getClassLoader()
+                        (Ingredient[]) in.readParcelableArray(Ingredient.class.getClassLoader()
                         )
                 )
         );
         steps = new ArrayList<Step>(
                 Arrays.<Step>asList(
-                        (Step[]) in.readArray(Ingredient.class.getClassLoader()
+                        (Step[]) in.readParcelableArray(Ingredient.class.getClassLoader()
                         )
                 )
         );

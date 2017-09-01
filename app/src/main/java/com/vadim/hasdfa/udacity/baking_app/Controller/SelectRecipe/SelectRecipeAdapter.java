@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.vadim.hasdfa.udacity.baking_app.Controller.RecipeDetail.Activityes.RecipeViewActivity;
 import com.vadim.hasdfa.udacity.baking_app.Model.Recipe;
 import com.vadim.hasdfa.udacity.baking_app.R;
@@ -39,6 +41,12 @@ public class SelectRecipeAdapter extends RecyclerView.Adapter<SelectRecipeAdapte
         holder.title.setText(r.getName());
         holder.servings.setText(""+r.getServings());
 
+        if (!r.getImage().isEmpty()) {
+            Picasso.with(holder.thumbnail.getContext())
+                    .load(r.getImage())
+                    .into(holder.thumbnail);
+        }
+
         final int item = position;
         holder.clickable.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +75,13 @@ public class SelectRecipeAdapter extends RecyclerView.Adapter<SelectRecipeAdapte
         TextView title;
         TextView servings;
         View clickable;
+        ImageView thumbnail;
         ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             servings = (TextView) itemView.findViewById(R.id.servings_count);
             clickable = itemView.findViewById(R.id.clickable);
+            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
         }
     }
 }
